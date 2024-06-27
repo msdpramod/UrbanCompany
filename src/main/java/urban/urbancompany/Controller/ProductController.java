@@ -39,7 +39,7 @@ public class ProductController {
     public  List<Product> getAllProducts(@PathVariable("cateogryname") String cateogryname){
         return new ArrayList<>();
     }
-
+    //hi
     @PostMapping("/products")
     public  Product addProduct(@RequestBody ProductRequestDTO productRequestDTO){
         return new Product();
