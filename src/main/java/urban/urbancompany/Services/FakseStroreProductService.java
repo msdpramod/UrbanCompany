@@ -6,6 +6,8 @@ import urban.urbancompany.DTOs.ProductResponseDTO;
 import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
 
+import java.util.List;
+
 @Service
 public class FakseStroreProductService implements iProductService{
     static RestTemplate restTemplate;
@@ -13,7 +15,11 @@ public class FakseStroreProductService implements iProductService{
     public FakseStroreProductService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
+    // Working on fetching all products from database
+    @Override
+    public List<Product> getAllProducts() {
+        return null;
+    }
 
     public  Product getProductByid(Long id) {
         // hit the Fakestore Api and get json response
