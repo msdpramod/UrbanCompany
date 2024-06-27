@@ -1,13 +1,13 @@
-package urban.urbancompany.Models;
+package urban.urbancompany.DTOs;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Product extends BaseModel{
+public class ProductRequestDTO {
     private String title;
+    private float price;
     private String description;
-    private double price;
-    private Category category;
     private String imageUrl;
+    private String category;
 }
