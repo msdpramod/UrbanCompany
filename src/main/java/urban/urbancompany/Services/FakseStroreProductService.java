@@ -6,6 +6,7 @@ import urban.urbancompany.DTOs.ProductResponseDTO;
 import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,7 +19,12 @@ public class FakseStroreProductService implements iProductService{
     // Working on fetching all products from database
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        List<ProductResponseDTO> productResponseDTO= restTemplate.getForObject("https://fakestoreapi.com/products", List.class);
+        List<Product> products = new ArrayList<>();
+        for (ProductResponseDTO productResponseDTO1: productResponseDTO){
+           products.add(getProductFromResponseDTO(productResponseDTO1));
+        }
+        return products;
     }
 
     public  Product getProductByid(Long id) {

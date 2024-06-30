@@ -22,7 +22,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public  List<Product> getAllProducts (){
-        return new ArrayList<>();
+        return productService.getAllProducts();
     }
 
     @GetMapping("/products/{id}")
@@ -39,7 +39,7 @@ public class ProductController {
     public  List<Product> getAllProducts(@PathVariable("cateogryname") String cateogryname){
         return new ArrayList<>();
     }
-    //hi
+
     @PostMapping("/products")
     public  Product addProduct(@RequestBody ProductRequestDTO productRequestDTO){
         return new Product();
