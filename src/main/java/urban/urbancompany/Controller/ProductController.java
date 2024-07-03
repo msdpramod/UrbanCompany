@@ -44,14 +44,14 @@ public class ProductController {
     public  Product addProduct(@RequestBody ProductRequestDTO productRequestDTO){
         return new Product();
     }
-
+    //partial update
     @PatchMapping("/products/{id}") //
-    public  Product updateProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
+    public  Product patchsomeDetailsInProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
         return new Product();
     }
-
+    // complete replacing the product details
     @PutMapping("/products/{id}") //
-    public  Product putsomeDetailsInProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
+    public  Product updateProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
         return new Product();
     }
 
