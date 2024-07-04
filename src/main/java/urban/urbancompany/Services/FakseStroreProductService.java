@@ -39,6 +39,7 @@ public class FakseStroreProductService implements iProductService{
     public  Product getProductByid(Long id) {
         // hit the Fakestore Api and get json response
         //parse the response and convert it into product
+
         ProductResponseDTO responseDTO= restTemplate.getForObject("https://fakestoreapi.com/products/"+id, ProductResponseDTO.class);
         Product product=getProductFromResponseDTO( responseDTO);
         return product;

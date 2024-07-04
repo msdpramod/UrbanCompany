@@ -1,6 +1,9 @@
 package urban.urbancompany.Controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import urban.urbancompany.DTOs.ErrorResponseDTO;
 import urban.urbancompany.DTOs.ProductRequestDTO;
 import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
@@ -21,13 +24,25 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public  List<Product> getAllProducts (){
-        return productService.getAllProducts();
+    public  ResponseEntity<List<Product>> getAllProducts (){
+        ResponseEntity responseEntity;
+        try{
+            List<Product> products= productService.getAllProducts();
+            responseEntity= new ResponseEntity(products, HttpStatus.OK);
+        }catch (Exception e){
+            ErrorResponseDTO errorResponseDTO= new ErrorResponseDTO();
+            errorResponseDTO.setMessage("something went wrong");
+            responseEntity= new ResponseEntity(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        //here we can add more catch blocks for different exceptions
+        return responseEntity;
     }
 
     @GetMapping("/products/{id}")
-    public Product getProductById(@PathVariable("id") Long id){
-        return productService.getProductByid(id);
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
+        Product product= productService.getProductByid(id);
+        ResponseEntity responseEntity= new ResponseEntity(product, HttpStatus.OK);
+        return responseEntity;
     }
 
     @GetMapping("/products/category")
@@ -41,22 +56,31 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public  Product addProduct(@RequestBody ProductRequestDTO productRequestDTO){
-        return new Product();
+    public  ResponseEntity<Product> addProduct(@RequestBody ProductRequestDTO productRequestDTO){
+        Product product= productService.addProduct(productRequestDTO);
+        ResponseEntity responseEntity= new ResponseEntity(product, HttpStatus.CREATED);
+        return responseEntity;
     }
     //partial update
     @PatchMapping("/products/{id}") //
-    public  Product patchsomeDetailsInProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
-        return new Product();
+    public  ResponseEntity<Product> patchsomeDetailsInProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
+        Product product= productService.patchsomeDetailsInProduct(id, productRequestDTO);
+        ResponseEntity responseEntity= new ResponseEntity(product, HttpStatus.OK);
+        return responseEntity;
+
     }
     // complete replacing the product details
     @PutMapping("/products/{id}") //
-    public  Product updateProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
-        return new Product();
+    public  ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody ProductRequestDTO productRequestDTO ){
+
+        Product product= productService.updateProduct(id, productRequestDTO);
+        ResponseEntity responseEntity= new ResponseEntity(product, HttpStatus.OK);
+        return responseEntity;
     }
 
     @DeleteMapping("/products/{id}")
-    public  boolean deleteProductById(@PathVariable Long id){
+    public boolean deleteProductById(@PathVariable Long id){
+
         return true;
     }
 
