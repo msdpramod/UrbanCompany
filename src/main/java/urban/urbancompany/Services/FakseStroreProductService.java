@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import urban.urbancompany.Controller.ProductController;
 import urban.urbancompany.DTOs.ProductRequestDTO;
 import urban.urbancompany.DTOs.ProductResponseDTO;
+import urban.urbancompany.Excepections.ProductNotFoundException;
 import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
 
@@ -17,11 +18,11 @@ import java.util.List;
 @Service
 public class FakseStroreProductService implements iProductService{
     static RestTemplate restTemplate;
-    private final ProductController productController;
+    // private final ProductController productController;
 
-    public FakseStroreProductService(RestTemplate restTemplate, ProductController productController) {
+    public FakseStroreProductService(RestTemplate restTemplate  ) {
         this.restTemplate = restTemplate;
-        this.productController = productController;
+
     }
     // Working on fetching all products from database
     @Override
@@ -36,11 +37,14 @@ public class FakseStroreProductService implements iProductService{
         return products;
     }
 
-    public  Product getProductByid(Long id) {
+    public  Product getProductByid(Long id) throws ProductNotFoundException {
         // hit the Fakestore Api and get json response
         //parse the response and convert it into product
 
         ProductResponseDTO responseDTO= restTemplate.getForObject("https://fakestoreapi.com/products/"+id, ProductResponseDTO.class);
+        if(responseDTO==null){
+            throw new ProductNotFoundException("Product with id "+id+" not found");
+        }
         Product product=getProductFromResponseDTO( responseDTO);
         return product;
     }

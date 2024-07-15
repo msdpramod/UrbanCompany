@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    iProductService productService;
+    private final iProductService productService;
 
     public ProductController(iProductService productService) {
         this.productService = productService;
@@ -25,16 +25,21 @@ public class ProductController {
 
     @GetMapping("/products")
     public  ResponseEntity<List<Product>> getAllProducts (){
-        ResponseEntity responseEntity;
-        try{
-            List<Product> products= productService.getAllProducts();
-            responseEntity= new ResponseEntity(products, HttpStatus.OK);
-        }catch (Exception e){
-            ErrorResponseDTO errorResponseDTO= new ErrorResponseDTO();
-            errorResponseDTO.setMessage("something went wrong");
-            responseEntity= new ResponseEntity(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        //here we can add more catch blocks for different exceptions
+//        ResponseEntity responseEntity;
+//        try{
+//            List<Product> products= productService.getAllProducts();
+//            responseEntity= new ResponseEntity(products, HttpStatus.OK);
+//        }catch (Exception e){
+//            ErrorResponseDTO errorResponseDTO= new ErrorResponseDTO();
+//            errorResponseDTO.setMessage("something went wrong");
+//            responseEntity= new ResponseEntity(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//        //here we can add more catch blocks for different exceptions
+//        //handling different exceptions in different catch blocks is not a good practice
+//        return responseEntity;
+
+        List<Product> products= productService.getAllProducts();
+        ResponseEntity responseEntity= new ResponseEntity(products, HttpStatus.OK);
         return responseEntity;
     }
 
