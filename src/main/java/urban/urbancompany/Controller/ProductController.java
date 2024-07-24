@@ -1,8 +1,10 @@
 package urban.urbancompany.Controller;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import urban.urbancompany.DTOs.RequestDTO;
 import urban.urbancompany.Models.Product;
+import urban.urbancompany.Services.iProductService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +12,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+    private final iProductService productService;
+
+    public ProductController(@Qualifier("FakeStoreProductService") iProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping("/")
     public List<Product> getAllProducts(){
+
 
         return null;
     }
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id){
-        return null;
+        return productService.getProductById(id);
     }
 
     @GetMapping("/categories")
@@ -40,7 +50,7 @@ public class ProductController {
         return null;
     }
     @PatchMapping("/{id}")
-    public Product patchProduct(@PathVariable Long id, @RequestBody RequestDTO requestDTO){
+    public Product replaceEntireProduct(@PathVariable Long id, @RequestBody RequestDTO requestDTO){
         return null;
     }
 
