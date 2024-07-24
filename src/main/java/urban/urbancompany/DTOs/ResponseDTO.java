@@ -3,11 +3,12 @@ package urban.urbancompany.DTOs;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class ProductRequestDTO {
+@Getter
+@Setter
+public class ResponseDTO {
     private String title;
-    private float price;
     private String description;
-    private String imageUrl;
+    private int price;
     private String category;
+    private String imageUrl;
 }
