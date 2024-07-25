@@ -10,6 +10,7 @@ import urban.urbancompany.Models.Product;
 import urban.urbancompany.Services.iProductService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
@@ -17,7 +18,7 @@ public class ProductController {
 
     private final iProductService productService;
 
-    public ProductController(@Qualifier("FakeStoreProductService") iProductService productService) {
+    public ProductController(@Qualifier("SelfProductService") iProductService productService) {
         this.productService = productService;
     }
 
@@ -61,18 +62,7 @@ public class ProductController {
 
     }
 
-    @GetMapping("/categories/{catName}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("catName") String categoryName){
-        ResponseEntity responseEntity;
-        try {
-            List<Product> products = productService.getProductsByCategory(categoryName);
-            responseEntity = new ResponseEntity<>(products, HttpStatus.OK);
-            return responseEntity;
-        } catch (Exception e) {
-            responseEntity = new ResponseEntity<>("Error retrieving products by category: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return responseEntity;
-    }
+
 
     @PostMapping("/")
     public ResponseEntity<Product> addProduct(@RequestBody RequestDTO requestDTO){

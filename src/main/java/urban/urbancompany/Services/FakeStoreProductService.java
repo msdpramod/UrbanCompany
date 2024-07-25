@@ -15,6 +15,7 @@ import urban.urbancompany.Models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Qualifier("FakeStoreProductService")
@@ -27,7 +28,7 @@ public class FakeStoreProductService implements iProductService{
 
     public Product getProductFromResponseDTO(ResponseDTO responseDTO){
         Product product = new Product();
-        product.setId(responseDTO.getId());
+        //product.setId(responseDTO.getI);
         product.setTitle(responseDTO.getTitle());
         product.setPrice(responseDTO.getPrice());
         product.setDescription(responseDTO.getDescription());
@@ -70,16 +71,6 @@ public class FakeStoreProductService implements iProductService{
         return categories;
     }
 
-    @Override
-    public List<Product> getProductsByCategory(String categoryName) {
-        ResponseDTO[] responseDTOList= restTemplate.getForObject("https://fakestoreapi.com/products/category/"+categoryName, ResponseDTO[].class);
-        ArrayList<Product> products = new ArrayList<>();
-        assert responseDTOList != null;
-        for (ResponseDTO responseDTO: responseDTOList){
-            products.add(getProductFromResponseDTO(responseDTO));
-        }
-        return products;
-    }
 
     @Override
     public Product addProduct(@RequestBody RequestDTO requestDTO) {
@@ -112,4 +103,5 @@ public class FakeStoreProductService implements iProductService{
         restTemplate.delete("https://fakestoreapi.com/products/"+id, requestDTO);
         return true;
     }
+
 }

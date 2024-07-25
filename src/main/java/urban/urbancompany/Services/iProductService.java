@@ -7,12 +7,13 @@ import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface iProductService {
     List<Product> getAllProducts();
     Product getProductById(Long id) throws ProductNotFoundException;
     List<Category> getAllCategories();
-    List<Product> getProductsByCategory(String categoryName);
+   // List<Category> getProductsByCategory(String categoryName);
     Product addProduct(RequestDTO requestDTO);
     Product updateProduct(Long id, RequestDTO requestDTO);
     Product replaceEntireProduct(Long id, RequestDTO requestDTO);

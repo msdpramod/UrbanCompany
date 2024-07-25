@@ -1,9 +1,8 @@
 package urban.urbancompany.DTOs;
 
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
-import urban.urbancompany.Models.Category;
+
 
 @Getter
 @Setter
