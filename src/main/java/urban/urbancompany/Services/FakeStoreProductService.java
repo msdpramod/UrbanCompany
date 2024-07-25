@@ -1,11 +1,15 @@
 package urban.urbancompany.Services;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.HttpMessageConverterExtractor;
+import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.RestTemplate;
 import urban.urbancompany.DTOs.RequestDTO;
 import urban.urbancompany.DTOs.ResponseDTO;
+import urban.urbancompany.Excepections.ProductNotFoundException;
 import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
 
@@ -38,6 +42,7 @@ public class FakeStoreProductService implements iProductService{
     public List<Product> getAllProducts() {
         ResponseDTO[] responseDTOList= restTemplate.getForObject("https://fakestoreapi.com/products", ResponseDTO[].class);
         ArrayList<Product> products = new ArrayList<>();
+        assert responseDTOList != null;
         for (ResponseDTO responseDTO: responseDTOList){
             products.add(getProductFromResponseDTO(responseDTO));
         }
@@ -45,17 +50,22 @@ public class FakeStoreProductService implements iProductService{
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws ProductNotFoundException {
         ResponseDTO responseDTO= restTemplate.getForObject("https://fakestoreapi.com/products/"+id, ResponseDTO.class);
+        if(responseDTO == null){
+            throw new ProductNotFoundException("Product not found with id: "+id);
+        }
         return getProductFromResponseDTO(responseDTO);
     }
 
     @Override
-    public List<Product> getAllCategories() {
-        ResponseDTO[] responseDTOList= restTemplate.getForObject("https://fakestoreapi.com/products/categories", ResponseDTO[].class);
-        ArrayList<Product> categories = new ArrayList<>();
-        for (ResponseDTO responseDTO: responseDTOList){
-            categories.add(getProductFromResponseDTO(responseDTO));
+    public List<Category> getAllCategories() {
+        ResponseDTO[] responseDTOList = restTemplate.getForObject("https://fakestoreapi.com/products/categories", ResponseDTO[].class);
+        List<Category> categories = new ArrayList<>();
+        if (responseDTOList != null) {
+            for (ResponseDTO responseDTO : responseDTOList) {
+                categories.add(new Category(responseDTO.getCategory()));
+            }
         }
         return categories;
     }
@@ -64,6 +74,7 @@ public class FakeStoreProductService implements iProductService{
     public List<Product> getProductsByCategory(String categoryName) {
         ResponseDTO[] responseDTOList= restTemplate.getForObject("https://fakestoreapi.com/products/category/"+categoryName, ResponseDTO[].class);
         ArrayList<Product> products = new ArrayList<>();
+        assert responseDTOList != null;
         for (ResponseDTO responseDTO: responseDTOList){
             products.add(getProductFromResponseDTO(responseDTO));
         }
@@ -73,22 +84,32 @@ public class FakeStoreProductService implements iProductService{
     @Override
     public Product addProduct(@RequestBody RequestDTO requestDTO) {
         ResponseDTO responseDTO= restTemplate.postForObject("https://fakestoreapi.com/products/", requestDTO, ResponseDTO.class);
+        assert responseDTO != null;
         return getProductFromResponseDTO(responseDTO);
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        return null;
+    public Product updateProduct(Long id, @RequestBody RequestDTO requestDTO) {
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(requestDTO, ResponseDTO.class);
+        HttpMessageConverterExtractor<ResponseDTO> responseExtractor = new HttpMessageConverterExtractor<>(ResponseDTO.class, restTemplate.getMessageConverters());
+        ResponseDTO responseDTO = restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PATCH, requestCallback, responseExtractor);
+        assert responseDTO != null;
+        return getProductFromResponseDTO(responseDTO);
     }
 
     @Override
-    public Product replaceEntireProduct(Long id, Product product) {
-        return null;
+    public Product replaceEntireProduct(Long id, @RequestBody RequestDTO requestDTO) {
+        RequestCallback requestCallback = restTemplate.httpEntityCallback(requestDTO, ResponseDTO.class);
+        HttpMessageConverterExtractor<ResponseDTO> responseExtractor = new HttpMessageConverterExtractor<>(ResponseDTO.class, restTemplate.getMessageConverters());
+        ResponseDTO responseDTO = restTemplate.execute("https://fakestoreapi.com/products/" + id, HttpMethod.PUT, requestCallback, responseExtractor);
+        assert responseDTO != null;
+        return getProductFromResponseDTO(responseDTO);
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public Boolean deleteProduct(Long id) {
         RequestDTO requestDTO = new RequestDTO();
         restTemplate.delete("https://fakestoreapi.com/products/"+id, requestDTO);
+        return true;
     }
 }

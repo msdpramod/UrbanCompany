@@ -3,6 +3,8 @@ package urban.urbancompany.Services;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import urban.urbancompany.DTOs.RequestDTO;
+import urban.urbancompany.Excepections.ProductNotFoundException;
+import urban.urbancompany.Models.Category;
 import urban.urbancompany.Models.Product;
 
 import java.util.List;
@@ -16,12 +18,12 @@ public class SelfProductService implements iProductService{
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(Long id) throws ProductNotFoundException {
         return null;
     }
 
     @Override
-    public List<Product> getAllCategories() {
+    public List<Category> getAllCategories() {
         return List.of();
     }
 
@@ -37,17 +39,16 @@ public class SelfProductService implements iProductService{
 
 
     @Override
-    public Product updateProduct(Long id, Product product) {
+    public Product updateProduct(Long id, RequestDTO requestDTO) {
+        return null;
+    }
+    @Override
+    public Product replaceEntireProduct(Long id, RequestDTO requestDTO) {
         return null;
     }
 
     @Override
-    public Product replaceEntireProduct(Long id, Product product) {
-        return null;
-    }
-
-    @Override
-    public void deleteProduct(Long id) {
-
+    public Boolean deleteProduct(Long id) {
+        return false;
     }
 }
