@@ -1,38 +1,42 @@
 package group.urbancompany.Service;
 
 import group.urbancompany.Models.User;
+import group.urbancompany.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private List<User> users =new ArrayList<>();
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public List<User> getUsers() {
-        return users;
+        return userRepository.findAll();
     }
-    public List<User> addUser(User user) {
-        users.add(user);
-        return users;
+
+    public User addUser(User user) {
+        return userRepository.save(user);
     }
+
     public User fetchUser(Long id) {
-        for (User user : users) {
-            if (user.getId().equals(id)) {
-                return user;
-            }
-        }
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
-    public boolean updateUser(Long id, User upadatedUser) {
-        for (User user : users) {
-            if (user.getId().equals(id)) {
-                user.setFirstname(upadatedUser.getFirstname());
-                user.setLastname(upadatedUser.getLastname());
-                user.setEmail(upadatedUser.getEmail());
-                user.setPhoneNumber(upadatedUser.getPhoneNumber());
-                return true;
-            }
+
+    public boolean updateUser(Long id, User updatedUser) {
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            user.setFirstname(updatedUser.getFirstname());
+            user.setLastname(updatedUser.getLastname());
+            user.setEmail(updatedUser.getEmail());
+            user.setPhoneNumber(updatedUser.getPhoneNumber());
+            userRepository.save(user);
+            return true;
         }
         return false;
     }

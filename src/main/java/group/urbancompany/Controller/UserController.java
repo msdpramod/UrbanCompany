@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
    private final UserService userService;
 
@@ -18,11 +18,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/api/users")
+    @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
-    @GetMapping("/api/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.fetchUser(id);
         if (user == null) {
@@ -32,18 +32,19 @@ public class UserController {
     }
 
 
-    @PostMapping("/api/users")
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-       userService.addUser(user);
-       return  new ResponseEntity<>(HttpStatus.CREATED);
+       User saved = userService.addUser(user);
+       return  new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/users/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
         boolean isUpdated = userService.updateUser(id, updatedUser);
         if (!isUpdated) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
+        User user = userService.fetchUser(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
