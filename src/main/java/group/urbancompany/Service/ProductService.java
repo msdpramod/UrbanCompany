@@ -29,7 +29,7 @@ public class ProductService {
 
     // GET all products
     public List<ProductResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.findAllByActiveTrue();
         List<ProductResponse> responses = new ArrayList<>();
         for (Product p : products) {
             responses.add(mapToProductResponse(p));
@@ -39,9 +39,15 @@ public class ProductService {
 
     // GET product by ID
     public Optional<ProductResponse> getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.map(this::mapToProductResponse);
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            ProductResponse response = mapToProductResponse(optionalProduct.get());
+            return Optional.of(response);
+        } else {
+            return Optional.empty();
+        }
     }
+
 
     // UPDATE product
     @Transactional
@@ -57,13 +63,16 @@ public class ProductService {
     // DELETE product
     @Transactional
     public boolean deleteProduct(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isPresent()) {
-            productRepository.deleteById(id);
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            product.setActive(false);
+            productRepository.save(product);  // Update product status
             return true;
         }
         return false;
     }
+
 
     // Helper: map ProductRequest → Product
     private Product mapToProduct(ProductRequest request, Product product) {
