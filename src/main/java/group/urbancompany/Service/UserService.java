@@ -4,6 +4,7 @@ import group.urbancompany.Models.User;
 import group.urbancompany.Repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,25 +20,25 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public void addUser(User user) {
+         userRepository.save(user);
     }
 
-    public User fetchUser(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public Optional<User> fetchUser(Long id) {
+        return userRepository.findById(id);
     }
 
-    public boolean updateUser(Long id, User updatedUser) {
-        Optional<User> optional = userRepository.findById(id);
-        if (optional.isPresent()) {
-            User user = optional.get();
+    @Transactional
+    public User updateUser(Long id, User updatedUser) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             user.setFirstname(updatedUser.getFirstname());
             user.setLastname(updatedUser.getLastname());
             user.setEmail(updatedUser.getEmail());
             user.setPhoneNumber(updatedUser.getPhoneNumber());
-            userRepository.save(user);
-            return true;
+            return userRepository.save(user);
         }
-        return false;
+        return null;
     }
 }
