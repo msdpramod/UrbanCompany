@@ -42,8 +42,8 @@ public class UserService {
         user.setEmail(userRequest.getEmail());
         user.setPhoneNumber(userRequest.getPhoneNumber());
 
-        if (userRequest.getAddressdto() != null) {
-            AddressDTO addrDTO = userRequest.getAddressdto();
+        if (userRequest.getAddress() != null) {
+            AddressDTO addrDTO = userRequest.getAddress();
             Address address = new Address();
             address.setStreet(addrDTO.getStreet());
             address.setCity(addrDTO.getCity());
@@ -78,8 +78,8 @@ public class UserService {
             user.setEmail(userRequest.getEmail());
             user.setPhoneNumber(userRequest.getPhoneNumber());
 
-            if (userRequest.getAddressdto() != null) {
-                AddressDTO addrDTO = userRequest.getAddressdto();
+            if (userRequest.getAddress() != null) {
+                AddressDTO addrDTO = userRequest.getAddress();
                 Address address = user.getAddress() != null ? user.getAddress() : new Address();
                 address.setStreet(addrDTO.getStreet());
                 address.setCity(addrDTO.getCity());

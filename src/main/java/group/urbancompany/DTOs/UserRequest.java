@@ -13,5 +13,5 @@ public class UserRequest {
     private String lastname;
     private String email;
     private String phoneNumber;
-    private AddressDTO addressdto;
+    private AddressDTO address;
 }
