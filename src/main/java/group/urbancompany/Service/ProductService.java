@@ -7,6 +7,8 @@ import group.urbancompany.Repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +73,17 @@ public class ProductService {
             return true;
         }
         return false;
+    }
+    @Transactional
+    public List<ProductResponse> searchProducts(String keyword) {
+        List<Product> products = productRepository.searchProducts(keyword);
+        List<ProductResponse> responses = new ArrayList<>();
+
+        for (Product product : products) {
+            responses.add(mapToProductResponse(product));
+        }
+
+        return responses;
     }
 
 
