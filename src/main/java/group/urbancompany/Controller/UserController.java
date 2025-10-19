@@ -3,12 +3,11 @@ package group.urbancompany.Controller;
 
 import group.urbancompany.Models.User;
 import group.urbancompany.Service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @RestController
@@ -20,14 +19,31 @@ public class UserController {
     }
 
     @GetMapping("/api/users")
-    public List<User> getAllUsers() {
-        // Logic to retrieve all users
-        return userService.getUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    }
+    @GetMapping("/api/users/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        User user = userService.fetchUser(id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userService.fetchUser(id), HttpStatus.OK);
     }
 
+
     @PostMapping("/api/users")
-    public String createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
        userService.addUser(user);
-         return "User added successfully";
+       return  new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/api/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        boolean isUpdated = userService.updateUser(id, updatedUser);
+        if (!isUpdated) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }
 }
