@@ -1,7 +1,13 @@
 package group.urbancompany.DTOs;
 
-import group.urbancompany.Models.UserRole;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class UserRequest {
     private String firstname;
     private String lastname;
