@@ -110,4 +110,12 @@ public class CartItemService {
 
 
     }
+
+    public void clearCart(String userId) {
+        Optional<User> userOptional = userRepository.findById(Long.parseLong(userId));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            cartItemRepository.deleteByUser(user);
+        }
+    }
 }
