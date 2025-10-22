@@ -1,30 +1,32 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: UrbanCompany
+#  h2:
+#    console:
+#      enabled: false
+#  datasource:
+#    url: jdbc:h2:mem:test
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: create   # Not a production-level setting
 
-  h2:
-    console:
-      enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"      # expose all endpoints
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
 
-  datasource:
-    url: jdbc:h2:mem:test
 
-  jpa:
-    show-sql: true
-    hibernate:
-       ddl-auto: create   # Not a production-level setting
-
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: *     # expose all actuator endpoints
-        base-path: /actuator
-    endpoint:
-      health:
-        show-details: when_authorized
-server:
-  port: 8080
 
 # ===========================
 # MySQL Configuration (for production)
